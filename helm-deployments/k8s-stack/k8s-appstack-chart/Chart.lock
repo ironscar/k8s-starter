@@ -1,0 +1,9 @@
+dependencies:
+- name: next-app-chart
+  repository: file://../../nextweb/next-app-chart
+  version: 0.1.0
+- name: spring-app-chart
+  repository: file://../../springweb/spring-app-chart
+  version: 0.1.0
+digest: sha256:9b22bf3882630e2f438e0ad030f97ffde03154868b2138d8517c1690f6a32aa8
+generated: "2026-08-24T08:52:54.379761341+05:30"

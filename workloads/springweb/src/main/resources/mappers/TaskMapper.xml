@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.k8s.springweb.repository.TaskRepository">
+
+    <resultMap id="TaskMap" type="com.k8s.springweb.domain.Task">
+        <id property="id" column="id" />
+        <result property="title" column="title" />
+        <result property="completed" column="completed" />
+        <result property="userId" column="user_id" />
+    </resultMap>
+
+    <select id="findAll" resultMap="TaskMap">
+        SELECT id, title, CASE WHEN completed='Y' THEN 1 ELSE 0 END AS completed FROM k8sdb.tasks
+        ORDER BY id
+        LIMIT #{limit}
+    </select>
+
+    <select id="insert" resultMap="TaskMap">
+        INSERT INTO k8sdb.tasks (title, completed) VALUES (#{title}, 'N') RETURNING *
+    </select>
+
+    <select id="update" resultMap="TaskMap">
+        UPDATE k8sdb.tasks
+        SET 
+            title = #{task.title}, 
+            completed = <choose>
+                <when test="task.completed == true"> 'Y' </when>
+                <otherwise> 'N' </otherwise>
+            </choose>
+        WHERE id = #{id}
+        RETURNING *
+    </select>
+
+    <delete id="delete">
+        DELETE FROM k8sdb.tasks WHERE id = #{id}
+    </delete>
+
+</mapper>

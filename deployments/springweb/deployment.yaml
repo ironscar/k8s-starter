@@ -1,0 +1,24 @@
+apiVersion: apps/v1 # what version of kubernetes api to use
+kind: Deployment # what kind of pod is it
+metadata: # unique name of the deployment
+  name: springweb
+spec:
+  replicas: 1 # number of replicas for app
+  selector: # tells deployment which pods belong to it
+    matchLabels: # deployment uses this to scan the cluster for pods with this label
+      app: springweb
+  template:
+    metadata:
+      labels: # the label to create the pod with so that the deployment can find it
+        app: springweb
+    spec:
+      containers:
+        - name: kdsw # name of the container in the pod
+          image: k8s-dck-springweb:0.0.1 # the image being used
+          imagePullPolicy: Never # always use local image (for local dev)
+          envFrom: # environment variables
+            - configMapRef: # specifies that the env vars come from a configmap
+                name: springweb-configmap # name of the configmap to use
+          ports: # all ports that are mapped from container to host
+            - name: http
+              containerPort: 8080

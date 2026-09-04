@@ -1,0 +1,37 @@
+# Default values for spring-app-chart.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# the app name
+appName: springweb
+
+# the db name
+dbName: pgdb1
+
+# This will set the replicaset count more information can be found here: https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/
+replicaCount: 1
+
+# the container details like name and port
+container:
+  name: kdsw
+  port: 8080
+
+# This sets the container image more information can be found here: https://kubernetes.io/docs/concepts/containers/images/
+image:
+  repository: k8s-dck-springweb
+  # This sets the pull policy for images.
+  pullPolicy: Never
+  # Overrides the image tag whose default is the chart appVersion if this is left as empty.
+  tag: ""
+
+# This is for setting up a service more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/
+service:
+  # This sets the service type more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types
+  type: ClusterIP
+  # This sets the ports more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/#field-spec-ports
+  port: 80
+
+# the app properties to inject into the container as env vars from a config map
+appProperties:
+  CONFIG_KEY1: "CONFIG VALUE A"
+  CONFIG_KEY2: "CONFIG VALUE B"

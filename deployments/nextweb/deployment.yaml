@@ -1,0 +1,21 @@
+apiVersion: apps/v1 # what version of kubernetes api to use
+kind: Deployment # what kind of pod is it
+metadata: # unique name of the deployment
+  name: nextweb
+spec:
+  replicas: 1 # number of replicas for app
+  selector: # tells deployment which pods belong to it
+    matchLabels: # deployment uses this to scan the cluster for pods with this label
+      app: nextweb
+  template:
+    metadata:
+      labels: # the label to create the pod with so that the deployment can find it
+        app: nextweb
+    spec:
+      containers:
+        - name: kdnw # name of the container in the pod
+          image: k8s-dck-nextweb:0.0.1 # the image being used
+          imagePullPolicy: Never # always use local image (for local dev)
+          ports: # all ports that are mapped from container to host
+            - name: http
+              containerPort: 3000

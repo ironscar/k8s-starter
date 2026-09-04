@@ -1,0 +1,1 @@
+web: java -jar target/spring-web-0.0.1-SNAPSHOT.war --port 8081 spring-web-0.0.1.war

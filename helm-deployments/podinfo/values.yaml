@@ -1,0 +1,4 @@
+ui:
+  color: "#c1c887"
+  message: "Hi, this is a custom value override for the podinfo Helm chart."
+prefix: /helm-podinfo # set so that it matches the ingress path prefix in deployments/ingress.yaml

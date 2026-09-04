@@ -1,0 +1,12 @@
+# Default values for k8s-app-stack.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# Global variables shared across all subcharts
+global:
+  environment: "development"
+
+# Override values in subchart springweb/spring-app-chart
+spring-app-chart:
+  appProperties:
+    CONFIG_KEY1: "CONFIG VALUE 1"

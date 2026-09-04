@@ -1,0 +1,29 @@
+# refer to deployments/springweb/deployment.yaml for the original properties and any comments
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.appName }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Values.appName }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.appName }}
+      # the annotation is generated with each invocation of template
+      annotations:
+        # generates a checksum based on the current configmap values
+        checksum/config: {{ .Values.appProperties | quote | sha256sum }}
+    spec:
+      containers:
+        - name: {{ .Values.container.name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          envFrom:
+            - configMapRef:
+                name: {{ .Values.appName }}-configmap
+          ports:
+            - name: http
+              containerPort: {{ .Values.container.port }}

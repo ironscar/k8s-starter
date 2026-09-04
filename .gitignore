@@ -1,0 +1,8 @@
+workloads/springweb/.mvn
+workloads/springweb/mvnw
+workloads/springweb/mvnw.cmd
+workloads/springweb/target
+repository/*/*.tar
+helm-deployments/*/*.tgz
+helm-deployments/*/*/charts/*.tgz
+helm-charts/ticom-app-chart

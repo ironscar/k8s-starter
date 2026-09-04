@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: springweb-service
+spec:
+  selector:
+    app: springweb
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: http # refers to the name of the port in the springweb deployment.yaml
+  type: ClusterIP

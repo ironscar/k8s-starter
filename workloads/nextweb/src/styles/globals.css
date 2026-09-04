@@ -1,0 +1,4 @@
+/* only setting background color so that context API can set the text color */
+.dark {
+  background-color: #333;
+}

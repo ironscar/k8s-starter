@@ -1,5 +1,5 @@
 # To generate Dockerfile for k8s deployment
-FROM artifactory.itg.ti.com/docker-scs-public/base/node:24.11.1-alpine AS base
+FROM node:26-alpine3.23 AS base
 # disable nextJs telemetry to avoid sending anonymous data to Vercel which constitutes unrequired network traffic
 ENV NEXT_TELEMETRY_DISABLED=1
 # to tell pnpm that its a non-interactive CI system to avoid looking for .git file which increases size

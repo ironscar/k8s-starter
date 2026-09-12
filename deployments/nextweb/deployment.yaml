@@ -16,6 +16,9 @@ spec:
         - name: kdnw # name of the container in the pod
           image: k8s-dck-nextweb:0.0.1 # the image being used
           imagePullPolicy: Never # always use local image (for local dev)
+          env:
+            - name: HOSTNAME # added as k3d otherwise wont be able to make connectons using localhost
+              value: "0.0.0.0"
           ports: # all ports that are mapped from container to host
             - name: http
               containerPort: 3000

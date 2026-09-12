@@ -97,6 +97,7 @@ Node components run on every node, maintaining running pods and providing the ru
   - Then `kubectl get svc` will show the new service created for the app with its cluster IP
 - Second, we need to install an `Ingress Controller`, k3s ships with `Traefik` out of the box
   - we create a cluster with a port mapping for the load balancer as `k3d cluster create <clustername> -p "<hostport>:<serviceport>@loadbalancer" --agents 1` since this cannot be done later easily
+  - here hostport will be 8080 for us and service port will be 80
   - then we create a `deployments/ingress.yaml` and apply that using `kubectl`
 - Now we no longer need a temporary port-forwarder or an explicit node-port and can access the app at same URL
 - Similarly, we can deploy multiple apps at different base URLs as shown in `deployments/ingress.yaml`

@@ -1,5 +1,5 @@
 # build stage
-FROM artifactory.itg.ti.com/docker-public-local/maven:3.9.11-eclipse-temurin-21 AS build
+FROM maven:3.9.16-eclipse-temurin-21-alpine AS build
 
 # create app directory and go into it
 WORKDIR /app
@@ -12,14 +12,14 @@ COPY pom.xml ./
 
 # copy source code
 COPY src ./src
-# run using custom settings.xml (temp disabled due to other issues)
-# RUN mvn -s ./settings.xml clean package -DskipTests
+
+# build the app and skip tests to speed up build
 RUN mvn clean package -DskipTests
 
 # ------------------------------------------------------------------------------------- #
 
 # run stage
-FROM artifactory.itg.ti.com/docker-public-local/eclipse-temurin:25_36-jre-alpine
+FROM cleanstart/jre:26.0.2.1_p1-amd64
 
 # create app directory and go into it
 WORKDIR /app

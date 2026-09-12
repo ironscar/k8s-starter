@@ -4,4 +4,4 @@ metadata:
   name: {{ .Values.dbName }}-external-service
 spec:
   type: ExternalName
-  externalName: host.rancher-desktop.internal
+  externalName: host.k3d.internal

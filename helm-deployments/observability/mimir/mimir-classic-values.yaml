@@ -1,0 +1,48 @@
+# deploy mimir with the classic architecture
+mimir:
+  structuredConfig:
+    ingest_storage:
+      enabled: false
+    ingester:
+      push_grpc_method_enabled: true # required for classic  architecture
+    multitenancy:
+      enabled: false # single tenant to get started
+
+kafka:
+  enabled: false # disable kafka for now
+
+# use the bundled minio instead of using our own object storage
+minio:
+  enabled: true
+
+# configure each sub-component of mimir
+distributor:
+  replicas: 1 # specify 1 replica for now
+
+ingester:
+  replicas: 1
+  zoneAwareReplication:
+    enabled: false  # disable zone aware replication for local single-zone cluster
+
+querier:
+  replicas: 1
+
+queryFrontend:
+  replicas: 1
+
+query_scheduler:
+  replicas: 1
+
+store_gateway:
+  replicas: 1
+  zoneAwareReplication:
+    enabled: false
+
+compactor:
+  replicas: 1
+
+ruler:
+  replicas: 1
+
+alertmanager:
+  replicas: 1

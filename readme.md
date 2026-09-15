@@ -2,7 +2,7 @@
 
 ## References
 
-This section includes the glossary of files in this repository:
+This section includes the glossary of files in this repository in the order:
 
 - `docs/k8s-roadmap.md`: Roadmap for ramping up on K8s
 - `docs/kubernetes.md`: Details on K8s
@@ -10,6 +10,7 @@ This section includes the glossary of files in this repository:
 - `docs/paketo.md`: Details about Paketo buildpacks
 - `docs/helm.md`: Details on Helm charts
 - `docs/observability.md`: Details on how to setup Observability stack
+  - `docs/mimir.md` talk about specific details on Mimir in the observability stack
 
 Other directories of importance apart from `docs` are:
 

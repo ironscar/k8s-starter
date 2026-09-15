@@ -5,8 +5,9 @@
 3. Deploy a front-end to create a three tier app [DONE]
 4. Connect apps to database (currently external) [DONE]
 5. Start using helm for all this [DONE]
-6. Setup observability stack with Istio, Open Telemetry, Loki, Tempo, Grafana and Prometheus
-7. Setup GitOps stack with Argo
-8. Setup secret management
-9. Other Kubernetes resource types
-10. Kubernetes operators
+6. Setup observability stack with Open Telemetry, Loki, Tempo, Grafana and Prometheus [WIP]
+7. Setup service mesh with Istio
+8. Setup GitOps stack with Argo
+9. Setup secret management
+10. Other Kubernetes resource types
+11. Kubernetes operators

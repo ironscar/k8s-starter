@@ -40,7 +40,7 @@
 #### Ingester
 
 - The Ingester is responsible for receiving and holding recently written time-series data before it is persisted into object storage
-- Each ingester maintains a local time series DB containing the recent data that it is responsible for
+- Each ingester maintains a local time series DB (the same as Prometheus) containing the recent data that it is responsible for
 - Once enough data is collected, it flushes the data to object storage as one block
 - Each ingester also maintains a WAL on disk tied to a Persistent Volume so that if the Ingester goes down, when it comes back up, it can replay the WAL to rebuild the data
   - a `Persistent Volume` in Kubernetes is a dedicated storage resource that allows data to persist on a node across pod restarts

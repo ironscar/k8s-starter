@@ -94,6 +94,7 @@
 
 #### Ruler
 
+- This is an optional component
 - The Ruler periodically evaluates metrics using PromQL rules which can be of two types:
   - Recording rules: Calculate a metric and store it back to Mimir
   - Alerting rules: Evaluate an alert condition and trigger an alert to Alert Manager
@@ -105,6 +106,7 @@
 
 #### Alert Manager
 
+- This is an optional component
 - AlertManager handles what happens when there is an alert triggered by the Ruler such as:
   - grouping related alerts so as to not get overwhelmed by number of alerts
   - deduplicating the same alert received from multiple Ruler instances

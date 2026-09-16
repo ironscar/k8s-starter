@@ -2,14 +2,14 @@
 mimir:
   structuredConfig:
     ingest_storage:
-      enabled: false
+      enabled: false # disable ingest storage architecture for now to use classic architecture
     ingester:
       push_grpc_method_enabled: true # required for classic  architecture
     multitenancy:
       enabled: false # single tenant to get started
 
 kafka:
-  enabled: false # disable kafka for now
+  enabled: false # disable kafka for now which is not required for classic architecture
 
 # use the bundled minio instead of using our own object storage
 minio:

@@ -99,6 +99,7 @@
   - Recording rules: Calculate a metric and store it back to Mimir
   - Alerting rules: Evaluate an alert condition and trigger an alert to Alert Manager
 - The rules are evaluated using PromQL and the Ruler actually forwards the PromQL to the Query Front-end
+  - the mimir chart can be configured to have Query Front-ends dedicated for Rulers
 - The evaluated metric for a recording rule is written back to Mimir by forwarding it to the Distributor
 - Rulers also participate in a consistent hash ring so that a distinct group of rules is assigned to a specific Ruler instance
   - memberlist helps in detecting when a Ruler is down and the rule group ownership is reassigned
@@ -135,13 +136,20 @@
   - The Exporter doesn't directly talk to Mimir components and just reads the Mimir runtime configuration file and lets Alloy scrape that data using its `/metrics` endpoint
 - Usually a single replica of the Overrides exporter is recommended per Mimir deployment as the runtime configuation is common
 
-Continue from https://chatgpt.com/c/6aa5d91f-8220-83e8-8793-5031a4af773c
-
 ### Install Mimir in Classic Architecture
 
 - We will begin by inistalling Mimir in classic architecture:
-  - we can see what all sub-components this will install by running `helm template mimir grafana/mimir-distributed -f mimir/mimir-classic-values.yaml -n observability > mimir/mimir-rendered.yaml`
+  - we can see the default `values.yaml` by running `helm show values grafana/mimir-distributed > default-values.yaml`
+  - we can also see what all sub-components this will install by running `helm template mimir grafana/mimir-distributed -f mimir/mimir-classic-values.yaml -n observability > mimir/mimir-classic-rendered.yaml`
+    - we start with mimir basic configurations
+      - `config`: basic startup config as string
+      - `structuredConfig`: helm-friendly startup config (recommended over using `config`)
+      - `runtimeConfig`: reloadable config (needs no restart)
+    - In `config` or `structuredConfig`, we can configure behaviors of the Mimir components
+      - this is different from the separate per-component configuration that allows us to configure replicas etc
 - Run `helm install mimir -f mimir/mimir-classic-values.yaml grafana/mimir-distributed -n observability` to install Mimir in distributed mode in the `observability` namespace
+  - when we run `kubectl get pods -n observability` after this we can see all the components installed
+  - additionally, we see a `mimir-gateway` which is the ingress to mimir components
 
 ---
 

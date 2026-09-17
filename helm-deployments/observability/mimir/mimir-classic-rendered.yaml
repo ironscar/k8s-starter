@@ -243,20 +243,6 @@ metadata:
   name: "minio-sa"
 
 ---
-# Source: mimir-distributed/charts/rollout_operator/templates/serviceaccount.yaml
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: mimir-rollout-operator
-  namespace: "observability"
-  labels:
-    helm.sh/chart: rollout-operator-0.50.1
-    app.kubernetes.io/name: rollout-operator
-    app.kubernetes.io/instance: mimir
-    app.kubernetes.io/version: "v0.38.1"
-    app.kubernetes.io/managed-by: Helm
-
----
 # Source: mimir-distributed/templates/serviceaccount.yaml
 apiVersion: v1
 kind: ServiceAccount
@@ -962,8 +948,6 @@ data:
       compression_enabled: false
       join_members:
       - dns+mimir-gossip-ring.observability.svc.cluster.local.:7946
-    multitenancy:
-      enabled: false
     querier:
       max_concurrent: 8
     query_scheduler:
@@ -1029,150 +1013,6 @@ spec:
       storage: "5Gi"
 
 ---
-# Source: mimir-distributed/charts/rollout_operator/templates/webhook-clusterrole.yaml
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
-metadata:
-  name: mimir-rollout-operator-webhook-clusterrole
-rules:
-  - apiGroups:
-      - admissionregistration.k8s.io
-    resources:
-      - validatingwebhookconfigurations
-      - mutatingwebhookconfigurations
-    verbs:
-      - list
-      - patch
-      - watch
----
-# Source: mimir-distributed/charts/rollout_operator/templates/webhook-clusterrole-binding.yaml
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRoleBinding
-metadata:
-  name: mimir-rollout-operator-webhook-clusterrolebinding
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: mimir-rollout-operator-webhook-clusterrole
-subjects:
-  - kind: ServiceAccount
-    name: mimir-rollout-operator
-    namespace: "observability"
----
-# Source: mimir-distributed/charts/rollout_operator/templates/role.yaml
-apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
-metadata:
-  name: mimir-rollout-operator
-  namespace: "observability"
-  labels:
-    helm.sh/chart: rollout-operator-0.50.1
-    app.kubernetes.io/name: rollout-operator
-    app.kubernetes.io/instance: mimir
-    app.kubernetes.io/version: "v0.38.1"
-    app.kubernetes.io/managed-by: Helm
-rules:
-- apiGroups:
-  - ""
-  resources:
-  - pods
-  verbs:
-  - list
-  - get
-  - watch
-  - delete
-  - patch
-- apiGroups:
-  - apps
-  resources:
-  - statefulsets
-  verbs:
-  - list
-  - get
-  - watch
-  - patch
-- apiGroups:
-  - apps
-  resources:
-  - statefulsets/status
-  verbs:
-  - update
-- apiGroups:
-  - rollout-operator.grafana.com
-  resources:
-  - zoneawarepoddisruptionbudgets
-  verbs:
-  - get
-  - list
-  - watch
-- apiGroups:
-    - rollout-operator.grafana.com
-  resources:
-    - replicatemplates/scale
-    - replicatemplates/status
-  verbs:
-    - get
-    - patch
----
-# Source: mimir-distributed/charts/rollout_operator/templates/webhook-role.yaml
-apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
-metadata:
-  name: mimir-rollout-operator-webhook-role
-  namespace: "observability"
-rules:
-  - apiGroups:
-      - ""
-    resources:
-      - secrets
-    verbs:
-      - update
-      - get
-    resourceNames:
-      - certificate
-  - apiGroups:
-      - ""
-    resources:
-      - secrets
-    verbs:
-      - create
----
-# Source: mimir-distributed/charts/rollout_operator/templates/rolebinding.yaml
-apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
-metadata:
-  name: mimir-rollout-operator
-  namespace: "observability"
-  labels:
-    helm.sh/chart: rollout-operator-0.50.1
-    app.kubernetes.io/name: rollout-operator
-    app.kubernetes.io/instance: mimir
-    app.kubernetes.io/version: "v0.38.1"
-    app.kubernetes.io/managed-by: Helm
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: Role
-  name: mimir-rollout-operator
-subjects:
-- kind: ServiceAccount
-  name: mimir-rollout-operator
-
----
-# Source: mimir-distributed/charts/rollout_operator/templates/webhook-role-binding.yaml
-apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
-metadata:
-  name: mimir-rollout-operator-webhook-rolebinding
-  namespace: "observability"
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: Role
-  name: mimir-rollout-operator-webhook-role
-subjects:
-  - kind: ServiceAccount
-    name: mimir-rollout-operator
-    namespace: "observability"
----
 # Source: mimir-distributed/charts/minio/templates/console-service.yaml
 apiVersion: v1
 kind: Service
@@ -1217,29 +1057,6 @@ spec:
     app: minio
     release: mimir
 
----
-# Source: mimir-distributed/charts/rollout_operator/templates/service.yaml
-apiVersion: v1
-kind: Service
-metadata:
-  name: mimir-rollout-operator
-  namespace: "observability"
-  labels:
-    helm.sh/chart: rollout-operator-0.50.1
-    app.kubernetes.io/name: rollout-operator
-    app.kubernetes.io/instance: mimir
-    app.kubernetes.io/version: "v0.38.1"
-    app.kubernetes.io/managed-by: Helm
-spec:
-  type: ClusterIP
-  ports:
-    - port: 443
-      protocol: TCP
-      targetPort: 8443
-      name: https
-  selector:
-    app.kubernetes.io/name: rollout-operator
-    app.kubernetes.io/instance: mimir
 ---
 # Source: mimir-distributed/templates/alertmanager/alertmanager-svc-headless.yaml
 apiVersion: v1
@@ -1902,82 +1719,6 @@ spec:
             secretName: mimir-minio        
 
 ---
-# Source: mimir-distributed/charts/rollout_operator/templates/deployment.yaml
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: mimir-rollout-operator
-  namespace: "observability"
-  labels:
-    helm.sh/chart: rollout-operator-0.50.1
-    app.kubernetes.io/name: rollout-operator
-    app.kubernetes.io/instance: mimir
-    app.kubernetes.io/version: "v0.38.1"
-    app.kubernetes.io/managed-by: Helm
-spec:
-  replicas: 1
-  revisionHistoryLimit: 10
-  minReadySeconds: 10
-  selector:
-    matchLabels:
-      app.kubernetes.io/name: rollout-operator
-      app.kubernetes.io/instance: mimir
-  strategy:
-    rollingUpdate:
-      maxSurge: 0
-      maxUnavailable: 1
-  template:
-    metadata:
-      namespace: "observability"
-      labels:
-        app.kubernetes.io/name: rollout-operator
-        app.kubernetes.io/instance: mimir
-    spec:
-      serviceAccountName: mimir-rollout-operator
-      securityContext:
-        fsGroup: 10001
-        runAsGroup: 10001
-        runAsNonRoot: true
-        runAsUser: 10001
-        seccompProfile:
-          type: RuntimeDefault
-      containers:
-        - name: rollout-operator
-          securityContext:
-            allowPrivilegeEscalation: false
-            capabilities:
-              drop:
-              - ALL
-            readOnlyRootFilesystem: true
-          image: docker.io/grafana/rollout-operator:v0.38.1
-          imagePullPolicy: IfNotPresent
-          args:
-          - -kubernetes.namespace=observability
-          - -zpdb.pod-ready-annotation-patch-timeout=5s
-          - -server-tls.enabled=true
-          - -server-tls.self-signed-cert.secret-name=certificate
-          - -server-tls.self-signed-cert.dns-name=mimir-rollout-operator.observability.svc
-          ports:
-            - name: http-metrics
-              containerPort: 8001
-              protocol: TCP
-            - name: https
-              containerPort: 8443
-              protocol: TCP
-          readinessProbe:
-            httpGet:
-              path: /ready
-              port: http-metrics
-            initialDelaySeconds: 5
-            timeoutSeconds: 1
-          resources:
-            limits:
-              memory: 200Mi
-            requests:
-              cpu: 100m
-              memory: 100Mi
-
----
 # Source: mimir-distributed/templates/distributor/distributor-dep.yaml
 apiVersion: apps/v1
 kind: Deployment
@@ -2018,7 +1759,7 @@ spec:
         app.kubernetes.io/component: distributor
         app.kubernetes.io/part-of: memberlist
       annotations:
-        checksum/config: 8ed6c2f01fd71c4a97d1eb0c1c4842b497b75aa73b1cf2eaebb3b47c8a0a5e64
+        checksum/config: bafb50d8a4574bd69aedfcd380f15481ba6bd75de37d4dd0f9a4153aa67c7be4
       namespace: "observability"
     spec:
       serviceAccountName: mimir
@@ -2252,7 +1993,7 @@ spec:
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/component: overrides-exporter
       annotations:
-        checksum/config: 8ed6c2f01fd71c4a97d1eb0c1c4842b497b75aa73b1cf2eaebb3b47c8a0a5e64
+        checksum/config: bafb50d8a4574bd69aedfcd380f15481ba6bd75de37d4dd0f9a4153aa67c7be4
       namespace: "observability"
     spec:
       serviceAccountName: mimir
@@ -2366,7 +2107,7 @@ spec:
         app.kubernetes.io/component: querier
         app.kubernetes.io/part-of: memberlist
       annotations:
-        checksum/config: 8ed6c2f01fd71c4a97d1eb0c1c4842b497b75aa73b1cf2eaebb3b47c8a0a5e64
+        checksum/config: bafb50d8a4574bd69aedfcd380f15481ba6bd75de37d4dd0f9a4153aa67c7be4
     spec:
       serviceAccountName: mimir
       securityContext:
@@ -2488,7 +2229,7 @@ spec:
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/component: query-frontend
       annotations:
-        checksum/config: 8ed6c2f01fd71c4a97d1eb0c1c4842b497b75aa73b1cf2eaebb3b47c8a0a5e64
+        checksum/config: bafb50d8a4574bd69aedfcd380f15481ba6bd75de37d4dd0f9a4153aa67c7be4
       namespace: "observability"
     spec:
       serviceAccountName: mimir
@@ -2608,7 +2349,7 @@ spec:
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/component: query-scheduler
       annotations:
-        checksum/config: 8ed6c2f01fd71c4a97d1eb0c1c4842b497b75aa73b1cf2eaebb3b47c8a0a5e64
+        checksum/config: bafb50d8a4574bd69aedfcd380f15481ba6bd75de37d4dd0f9a4153aa67c7be4
     spec:
       serviceAccountName: mimir
       securityContext:
@@ -2726,7 +2467,7 @@ spec:
         app.kubernetes.io/component: ruler
         app.kubernetes.io/part-of: memberlist
       annotations:
-        checksum/config: 8ed6c2f01fd71c4a97d1eb0c1c4842b497b75aa73b1cf2eaebb3b47c8a0a5e64
+        checksum/config: bafb50d8a4574bd69aedfcd380f15481ba6bd75de37d4dd0f9a4153aa67c7be4
       namespace: "observability"
     spec:
       serviceAccountName: mimir
@@ -2860,7 +2601,7 @@ spec:
         app.kubernetes.io/component: alertmanager
         app.kubernetes.io/part-of: memberlist
       annotations:
-        checksum/config: 8ed6c2f01fd71c4a97d1eb0c1c4842b497b75aa73b1cf2eaebb3b47c8a0a5e64
+        checksum/config: bafb50d8a4574bd69aedfcd380f15481ba6bd75de37d4dd0f9a4153aa67c7be4
         checksum/alertmanager-fallback-config: 9222c64e89fe0e1cf7371c2fe1d9a919549b65a5cad48da8cbb9402028529cc0
       namespace: "observability"
     spec:
@@ -3005,7 +2746,7 @@ spec:
         app.kubernetes.io/component: compactor
         app.kubernetes.io/part-of: memberlist
       annotations:
-        checksum/config: 8ed6c2f01fd71c4a97d1eb0c1c4842b497b75aa73b1cf2eaebb3b47c8a0a5e64
+        checksum/config: bafb50d8a4574bd69aedfcd380f15481ba6bd75de37d4dd0f9a4153aa67c7be4
       namespace: "observability"
     spec:
       serviceAccountName: mimir
@@ -3135,7 +2876,7 @@ spec:
         app.kubernetes.io/component: ingester
         app.kubernetes.io/part-of: memberlist
       annotations:
-        checksum/config: 8ed6c2f01fd71c4a97d1eb0c1c4842b497b75aa73b1cf2eaebb3b47c8a0a5e64
+        checksum/config: bafb50d8a4574bd69aedfcd380f15481ba6bd75de37d4dd0f9a4153aa67c7be4
       namespace: "observability"
     spec:
       serviceAccountName: mimir
@@ -3269,7 +3010,7 @@ spec:
         app.kubernetes.io/component: store-gateway
         app.kubernetes.io/part-of: memberlist
       annotations:
-        checksum/config: 8ed6c2f01fd71c4a97d1eb0c1c4842b497b75aa73b1cf2eaebb3b47c8a0a5e64
+        checksum/config: bafb50d8a4574bd69aedfcd380f15481ba6bd75de37d4dd0f9a4153aa67c7be4
       namespace: "observability"
     spec:
       serviceAccountName: mimir
@@ -3402,169 +3143,6 @@ spec:
         resources:
           requests:
             memory: 128Mi
-
----
-# Source: mimir-distributed/charts/rollout_operator/templates/prepare-downscale-webhook.yaml
-apiVersion: admissionregistration.k8s.io/v1
-kind: MutatingWebhookConfiguration
-metadata:
-  name: prepare-downscale-observability
-  labels:
-    grafana.com/inject-rollout-operator-ca: "true"
-    grafana.com/namespace: "observability"
-    helm.sh/chart: rollout-operator-0.50.1
-    app.kubernetes.io/name: rollout-operator
-    app.kubernetes.io/instance: mimir
-    app.kubernetes.io/version: "v0.38.1"
-    app.kubernetes.io/managed-by: Helm
-webhooks:
-  - name: prepare-downscale-observability.grafana.com
-    clientConfig:
-      service:
-        namespace: "observability"
-        name: mimir-rollout-operator
-        path: /admission/prepare-downscale
-        port: 443
-    rules:
-      - operations:
-          - UPDATE
-        apiGroups:
-          - apps
-        apiVersions:
-          - v1
-        resources:
-          - statefulsets
-          - statefulsets/scale
-        scope: Namespaced
-    admissionReviewVersions:
-      - v1
-    namespaceSelector:
-      matchLabels:
-        kubernetes.io/metadata.name: "observability"
-    sideEffects: NoneOnDryRun
-    matchPolicy: Equivalent
-    timeoutSeconds: 10
-    failurePolicy: Fail
----
-# Source: mimir-distributed/charts/rollout_operator/templates/no-downscale-webhook.yaml
-apiVersion: admissionregistration.k8s.io/v1
-kind: ValidatingWebhookConfiguration
-metadata:
-  name: no-downscale-observability
-  labels:
-    grafana.com/inject-rollout-operator-ca: "true"
-    grafana.com/namespace: "observability"
-    helm.sh/chart: rollout-operator-0.50.1
-    app.kubernetes.io/name: rollout-operator
-    app.kubernetes.io/instance: mimir
-    app.kubernetes.io/version: "v0.38.1"
-    app.kubernetes.io/managed-by: Helm
-webhooks:
-  - name: no-downscale-observability.grafana.com
-    clientConfig:
-      service:
-        namespace: "observability"
-        name: mimir-rollout-operator
-        path: /admission/no-downscale
-        port: 443
-    rules:
-      - operations:
-          - UPDATE
-        apiGroups:
-          - apps
-        apiVersions:
-          - v1
-        resources:
-          - statefulsets
-          - statefulsets/scale
-        scope: Namespaced
-    admissionReviewVersions:
-      - v1
-    namespaceSelector:
-      matchLabels:
-        kubernetes.io/metadata.name: "observability"
-    sideEffects: None
-    failurePolicy: Fail
----
-# Source: mimir-distributed/charts/rollout_operator/templates/pod-eviction-webhook.yaml
-apiVersion: admissionregistration.k8s.io/v1
-kind: ValidatingWebhookConfiguration
-metadata:
-  name: pod-eviction-observability
-  labels:
-    grafana.com/inject-rollout-operator-ca: "true"
-    grafana.com/namespace: "observability"
-    helm.sh/chart: rollout-operator-0.50.1
-    app.kubernetes.io/name: rollout-operator
-    app.kubernetes.io/instance: mimir
-    app.kubernetes.io/version: "v0.38.1"
-    app.kubernetes.io/managed-by: Helm
-webhooks:
-  - name: pod-eviction-observability.grafana.com
-    clientConfig:
-      service:
-        namespace: "observability"
-        name: mimir-rollout-operator
-        path: /admission/pod-eviction
-        port: 443
-    rules:
-      - operations:
-          - CREATE
-        apiGroups:
-          - ""
-        apiVersions:
-          - v1
-        resources:
-          - pods/eviction
-        scope: Namespaced
-    admissionReviewVersions:
-      - v1
-    namespaceSelector:
-      matchLabels:
-        kubernetes.io/metadata.name: "observability"
-    sideEffects: None
-    timeoutSeconds: 10
-    failurePolicy: Fail
----
-# Source: mimir-distributed/charts/rollout_operator/templates/zone-aware-pod-disruption-budget-validating-webhook.yaml
-apiVersion: admissionregistration.k8s.io/v1
-kind: ValidatingWebhookConfiguration
-metadata:
-  name: zpdb-validation-observability
-  labels:
-    grafana.com/inject-rollout-operator-ca: "true"
-    grafana.com/namespace: "observability"
-    helm.sh/chart: rollout-operator-0.50.1
-    app.kubernetes.io/name: rollout-operator
-    app.kubernetes.io/instance: mimir
-    app.kubernetes.io/version: "v0.38.1"
-    app.kubernetes.io/managed-by: Helm
-webhooks:
-  - name: zpdb-validation-observability.grafana.com
-    clientConfig:
-      service:
-        namespace: "observability"
-        name: mimir-rollout-operator
-        path: /admission/zpdb-validation
-        port: 443
-    rules:
-      - operations:
-          - CREATE
-          - UPDATE
-        apiGroups:
-          - rollout-operator.grafana.com
-        apiVersions:
-          - v1
-        resources:
-          - zoneawarepoddisruptionbudgets
-        scope: Namespaced
-    admissionReviewVersions: ["v1"]
-    namespaceSelector:
-      matchLabels:
-        kubernetes.io/metadata.name: "observability"
-    sideEffects: None
-    timeoutSeconds: 10
-    failurePolicy: Fail
 ---
 # Source: mimir-distributed/charts/minio/templates/post-job.yaml
 apiVersion: batch/v1

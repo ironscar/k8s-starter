@@ -45,4 +45,8 @@ Our Kubernetes Observability Stack will consist of the following:
 ## Installing LGTM components
 
 - `kubectl create ns observability` to create a new namespace to deploy the LGTM stack components (start from `helm-deployments/observability`)
-- `helm repo add grafana https://grafana.github.io/helm-charts` to add the repository which contains all the charts
+- To add the charts, lets add their corresponding repositories first:
+  - `helm repo add grafana https://grafana.github.io/helm-charts` has Mimir and Alloy
+  - `helm repo add grafana-community https://grafana-community.github.io/helm-charts` has Loki, Tempo and Grafana
+  - `helm repo update` to sync the latest version to local
+- Now continue from `mimir.md` for Mimir installation

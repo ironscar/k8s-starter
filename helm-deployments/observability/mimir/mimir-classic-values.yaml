@@ -4,14 +4,12 @@ mimir:
     ingest_storage:
       enabled: false # disable ingest storage architecture for now to use classic architecture
     ingester:
-      push_grpc_method_enabled: true # required for classic  architecture
-    multitenancy:
-      enabled: false # single tenant to get started
+      push_grpc_method_enabled: true # required for classic architecture
 
 kafka:
   enabled: false # disable kafka for now which is not required for classic architecture
 
-# use the bundled minio instead of using our own object storage
+# use the bundled minio instead of using our own object storage (this is true by default though)
 minio:
   enabled: true
 
@@ -22,7 +20,7 @@ distributor:
 ingester:
   replicas: 1
   zoneAwareReplication:
-    enabled: false  # disable zone aware replication for local single-zone cluster
+    enabled: false  # disable zone aware ingester replication for local single-zone cluster
 
 querier:
   replicas: 1
@@ -36,7 +34,7 @@ query_scheduler:
 store_gateway:
   replicas: 1
   zoneAwareReplication:
-    enabled: false
+    enabled: false # disable zone aware store gateway replication for local single-zone cluster
 
 compactor:
   replicas: 1
@@ -46,3 +44,6 @@ ruler:
 
 alertmanager:
   replicas: 1
+
+rollout_operator:
+  enabled: false # disable rollout operator for now which is not required for local single-zone cluster

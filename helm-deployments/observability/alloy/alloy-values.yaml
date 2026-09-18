@@ -4,7 +4,7 @@ cluster:
 destinations: # where does alloy send metrics
   mimir: # specify mimir for metrics
     type: prometheus
-    url: http://mimir-gateway.observability.svc.cluster.local/ap1/v1/push # Mimir write endpoint
+    url: http://mimir-gateway.observability.svc.cluster.local/api/v1/push # Mimir write endpoint
     tenantId: my-org-id # required for Mimiir tenant identification (internally generates X-Scope-OrgID header)
 
 collectors: # what alloy collectors to create

@@ -2845,7 +2845,7 @@ metadata:
   namespace: "observability"
 spec:
   podManagementPolicy: Parallel
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app.kubernetes.io/name: mimir

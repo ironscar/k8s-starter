@@ -18,7 +18,7 @@ distributor:
   replicas: 1 # specify 1 replica for now
 
 ingester:
-  replicas: 1
+  replicas: 3 # to match the default replication factor of 3 (else alloy integration fails with too many unhealthy instances error)
   zoneAwareReplication:
     enabled: false  # disable zone aware ingester replication for local single-zone cluster
 

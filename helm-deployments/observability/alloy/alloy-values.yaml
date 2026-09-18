@@ -1,0 +1,51 @@
+cluster:
+  name: my-cluster
+
+destinations: # where does alloy send metrics
+  mimir: # specify mimir for metrics
+    type: prometheus
+    url: http://mimir-gateway.observability.svc.cluster.local/ap1/v1/push # Mimir write endpoint
+    tenantId: my-org-id # required for Mimiir tenant identification (internally generates X-Scope-OrgID header)
+
+collectors: # what alloy collectors to create
+  metrics: # create a collector called metrics
+    controller:
+      replicas: 1 # specify number of alloy instances in this collector definition
+    presets:
+      - clustered # enables Alloy clustering so that metrics scraping is distributed across multiple instances
+      - statefulset # deploy as statefulset
+
+clusterMetrics: # collect cluster metrics from cluster components (requires kube-state-metrics to be deployed)
+  enabled: true
+  collector: metrics
+
+costMetrics: # collect cost metrics from the cluster (requires opencost to be deployed)
+  enabled: true
+  collector: metrics
+
+hostMetrics: # collect host metrics from nodes in the cluster
+  enabled: true
+  linuxHosts: # collect node metrics from linux hosts (requires node-exporter to be deployed)
+    enabled: true
+  energyMetrics: # collect energy metrics from nodes (requires kepler to be deployed)
+    enabled: true
+  collector: metrics
+
+telemetryServices: # deploy supporting services to collect below metrics
+  kepler: # specifies energy consumption metrics of cluster resources
+    deploy: true
+  kube-state-metrics: # specifies deployments, replicas, resource limits etc
+    deploy: true
+  node-exporter: # specifies CPU/memory/disk/network usage of node
+    deploy: true
+  opencost: # specifies cost metrics of cluster resources
+    deploy: true
+    metricsSource: mimir
+    opencost:
+      exporter:
+        defaultClusterId: my-cluster
+        extraEnv:
+          PROMETHEUS_HEADER_X_SCOPE_ORGID: "my-org-id" # add tenantId from opencost to Alloy required for mimir
+      prometheus:
+        external:
+          url: http://mimir-gateway.observability.svc.cluster.local/prometheus # Mimir query endpoint prefix

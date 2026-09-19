@@ -1,0 +1,14 @@
+persistence:
+  enabled: true # enable persistence to retain all the dashboards and data sources across pod restarts
+
+ingress:
+  enabled: true # enable an ingress for grafana dashboard
+  ingressClassName: traefik # configure it to work for traefik on k3d
+  path: /grafana # base url for path-based routing
+  hosts:
+    - "" # specifies that there is no hostname to override the default and use localhost:8080
+
+grafana.ini:
+  server:
+    root_url: http://localhost:8080/grafana/ # specifies the public url that users should use to reach the dashboard
+    serve_from_sub_path: true # to make grafana accept the /grafana subpath instead of the default /

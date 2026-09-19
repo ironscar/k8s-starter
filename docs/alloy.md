@@ -34,5 +34,3 @@
   - cost metrics from opencost
 - Then we install this chart with `helm install alloy -f alloy-values.yaml grafana/k8s-monitoring -n observability`
   - we can see opencost, node-exporter, kepler, kube-state-metrics and the operator pods running
-
-Continue from https://chatgpt.com/c/6aa5d91f-8220-83e8-8793-5031a4af773c

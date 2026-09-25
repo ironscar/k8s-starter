@@ -12,6 +12,7 @@ Our Kubernetes Observability Stack will consist of the following:
 - it has dashboards which visualizes system using graphs and charts
 - Allows to click on a spike on a graph and instantly see the matching logs and trace the error path
 - Evaluates data from all sources and can send alerts
+- `docs/grafana.md` talks about specific details on Grafana in the observability stack and its installation
 
 ### Loki (Log Aggregation)
 
@@ -32,13 +33,22 @@ Our Kubernetes Observability Stack will consist of the following:
 - Both speak the same query language to query metrics
 - Use only Prometheus if a single Prometheus server is able to continue collecting metrics across the cluster without crashing
 - If it starts crashing, we use Mimir which horizontally scales Prometheus functionality
+- `docs/mimir.md` talks about specific details on Mimir in the observability stack and its installation
 
-### OpenTelemetry (Data Collector)
+### Pyroscope (Performance Profiling)
+
+- Pyroscope is the storage and query backend for performance profiles
+- Alloy collects profiles and forwards them to Pyroscope
+- Grafana can then query Pyroscope to visualize them
+- Performance profiles provide resource observability at a code-line-level (CPU at a particular line of a particular function)
+
+### OpenTelemetry & Alloy (Data Collector)
 
 - OTel acts as a single dependency that can collects logs, metrics and traces from an app and forward them to a separately deployed entity called Collector
-- Then the Collector routes the logs to Loki, metrics to Prometheus or Mimir, tracing data to Tempo
+- Then the Collector routes the logs to Loki, metrics to Prometheus or Mimir, tracing data to Tempo, profile data to Pyroscope
 - Collectors can be OTel Collector or Grafana Alloy
 - Grafana Alloy is an advanced distbution of OTel Collector that allows more features than OTel Collector
+- `docs/alloy.md` talks about specific details on Alloy in the observability stack and its installation
 
 ---
 
@@ -46,7 +56,6 @@ Our Kubernetes Observability Stack will consist of the following:
 
 - `kubectl create ns observability` to create a new namespace to deploy the LGTM stack components (start from `helm-deployments/observability`)
 - To add the charts, lets add their corresponding repositories first:
-  - `helm repo add grafana https://grafana.github.io/helm-charts` has Mimir and Alloy
+  - `helm repo add grafana https://grafana.github.io/helm-charts` has Mimir, Pyroscope and Alloy
   - `helm repo add grafana-community https://grafana-community.github.io/helm-charts` has Loki, Tempo and Grafana
   - `helm repo update` to sync the latest version to local
-- Now continue from `mimir.md` for Mimir installation

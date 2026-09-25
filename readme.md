@@ -10,9 +10,6 @@ This section includes the glossary of files in this repository in the order:
 - `docs/paketo.md`: Details about Paketo buildpacks
 - `docs/helm.md`: Details on Helm charts
 - `docs/observability.md`: Details on how to setup Observability stack
-  - `docs/mimir.md` talks about specific details on Mimir in the observability stack
-  - `docs/alloy.md` talks about specific details on Alloy in the observability stack
-  - `docs/grafana.md` talks about specific details on Grafana in the observability stack
 
 Other directories of importance apart from `docs` are:
 

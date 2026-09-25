@@ -7,7 +7,10 @@
 5. Start using helm for all this [DONE]
 6. Setup observability stack with Open Telemetry, Loki, Tempo, Grafana and Prometheus [WIP]
 7. Setup service mesh with Istio
-8. Setup GitOps stack with Argo
+8. Setup GitOps stack with Argo and Kargo
 9. Setup secret management
 10. Other Kubernetes resource types
-11. Kubernetes operators
+11. Horizontal and Vertical scaling
+12. KEDA and Karpenter
+13. Serverless with Knative or OpenFaaS
+14. Kubernetes operators

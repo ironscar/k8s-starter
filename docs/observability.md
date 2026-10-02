@@ -12,7 +12,7 @@ Our Kubernetes Observability Stack will consist of the following:
 - it has dashboards which visualizes system using graphs and charts
 - Allows to click on a spike on a graph and instantly see the matching logs and trace the error path
 - Evaluates data from all sources and can send alerts
-- `docs/grafana.md` talks about specific details on Grafana in the observability stack and its installation
+- `docs/observability-grafana.md` talks about specific details on Grafana in the observability stack and its installation
 
 ### Loki (Log Aggregation)
 
@@ -33,7 +33,7 @@ Our Kubernetes Observability Stack will consist of the following:
 - Both speak the same query language to query metrics
 - Use only Prometheus if a single Prometheus server is able to continue collecting metrics across the cluster without crashing
 - If it starts crashing, we use Mimir which horizontally scales Prometheus functionality
-- `docs/mimir.md` talks about specific details on Mimir in the observability stack and its installation
+- `docs/observability-mimir.md` talks about specific details on Mimir in the observability stack and its installation
 
 ### Pyroscope (Performance Profiling)
 
@@ -48,7 +48,7 @@ Our Kubernetes Observability Stack will consist of the following:
 - Then the Collector routes the logs to Loki, metrics to Prometheus or Mimir, tracing data to Tempo, profile data to Pyroscope
 - Collectors can be OTel Collector or Grafana Alloy
 - Grafana Alloy is an advanced distbution of OTel Collector that allows more features than OTel Collector
-- `docs/alloy.md` talks about specific details on Alloy in the observability stack and its installation
+- `docs/observability-alloy.md` talks about specific details on Alloy in the observability stack and its installation
 
 ---
 

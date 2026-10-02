@@ -14,7 +14,7 @@
   - this is the issue with Prometheus
   - so it basically uses the same fundamental idea as microservices to achieve the functionality where each independent service can be scaled separately as required
 
-<img src="images/mimir-classic.png" />
+<img src="images/mimir-classic-architecture.png" />
 
 ### Write Path Components
 

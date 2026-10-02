@@ -5,7 +5,7 @@
 3. Deploy a front-end to create a three tier app [DONE]
 4. Connect apps to database (currently external) [DONE]
 5. Start using helm for all this [DONE]
-6. Setup observability stack with Open Telemetry, Loki, Tempo, Grafana and Prometheus [WIP]
+6. Setup observability stack with Open Telemetry, Alloy, Mimir, Loki, Tempo, Pyroscope and Grafana [WIP]
 7. Setup service mesh with Istio
 8. Setup GitOps stack with Argo and Kargo
 9. Setup secret management

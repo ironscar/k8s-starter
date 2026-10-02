@@ -13,6 +13,8 @@
 
 ## Alloy Architecture
 
+<img src="images/alloy-architecture.png" />
+
 - The Alloy deployment via `k8s-monitoring` happens in three distinct phases
   - `management layer` - Alloy operator
     - the Alloy operator manages the lifecycle of kubernetes workloads in the collector layer
@@ -41,6 +43,13 @@
 - Mimir/Loki/Tempo/Pyroscope expose a /metrics endpoint that is discovered by Alloy from which metrics data is collected (pull-based)
   - we are not going to care about logs/traces/profiles from observability components as those are not very important for us
   - metrics could be important for us to decide how to configure these components so that we can use resources correctly
+- For Kubernetes infrastructure telemetry such as node-exporter, kepler, opencost, kubernetes-specific metrics:
+  - Alloy uses Kubernetes service discovery to find existing resources
+  - Then it checks if these resources matches the target from which telemetry needs to be collected
+  - Then the corresponding scrape component collects the metrics and forwards to the appropriate backend
+- For Otel-oriented telemetry from deployed applications:
+  - OTel directly sends the telemetry to Alloy endpoints
+- When there are multiple Alloy instances, they coordinate between themselves so that telemetry collection is distributed between them
 
 ## Alloy Metrics Setup
 

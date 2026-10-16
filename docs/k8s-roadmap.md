@@ -8,9 +8,12 @@
 6. Setup observability stack with Open Telemetry, Alloy, Mimir, Loki, Tempo, Pyroscope and Grafana [WIP]
 7. Setup service mesh with Istio
 8. Setup GitOps stack with Argo and Kargo
-9. Setup secret management
+9. Setup secret management with Spiffe/Spire
 10. Other Kubernetes resource types
 11. Horizontal and Vertical scaling
 12. KEDA and Karpenter
 13. Serverless with Knative or OpenFaaS
 14. Kubernetes operators
+15. CNCF Projects:
+    1.  CrossPlane
+    2.  KubeVela
